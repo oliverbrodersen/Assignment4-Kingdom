@@ -20,7 +20,7 @@ public class TresureRoomGuardsman implements TreasureRoomDoor
     treasureRoom = new TreasureRoom();
   }
 
-  @Override public void acquireReadAccess(String actorName)
+  @Override public synchronized void acquireReadAccess(String actorName)
   {
     waitingReaders++;
     while(activeWriter){
@@ -37,9 +37,9 @@ public class TresureRoomGuardsman implements TreasureRoomDoor
     activeReaders++;
   }
 
-  @Override public void acquireWriteAccess(String actorName)
+  @Override public synchronized void acquireWriteAccess(String actorName)
   {
-    while(!activeWriter || activeReaders == 0 || waitingReaders == 0){
+    while(activeWriter || activeReaders > 0 || waitingReaders > 0){
       try{
         wait();
       }
@@ -52,7 +52,7 @@ public class TresureRoomGuardsman implements TreasureRoomDoor
     activeWriter = true;
   }
 
-  @Override public void releaseReadAccess(String actorName)
+  @Override public synchronized void releaseReadAccess(String actorName)
   {
     activeReaders--;
     treasureRoom.releaseReadAccess(actorName);
@@ -60,7 +60,7 @@ public class TresureRoomGuardsman implements TreasureRoomDoor
       notifyAll();
   }
 
-  @Override public void releaseWriteAccess(String actorName)
+  @Override public synchronized void releaseWriteAccess(String actorName)
   {
     activeWriter = false;
     treasureRoom.acquireWriteAccess(actorName);

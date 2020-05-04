@@ -107,7 +107,7 @@ public class ArrayList<T> implements kingdom.ArrayList.ListADT<T>
    @Override
    public T get(int index)
    {
-      if (index < 0 || index > size - 1)
+      if (index < 0 || index > size)
       {
          throw new IllegalStateException("index:" + index);
       }

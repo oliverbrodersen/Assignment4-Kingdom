@@ -11,4 +11,7 @@ public class GoldNugget implements Valuable
   {
     return 100;
   }
+  public String toString(){
+    return "Gold nugget";
+  }
 }

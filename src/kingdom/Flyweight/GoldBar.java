@@ -11,4 +11,7 @@ public class GoldBar implements Valuable
   {
     return 1000;
   }
+  public String toString(){
+    return "Gold bar";
+  }
 }

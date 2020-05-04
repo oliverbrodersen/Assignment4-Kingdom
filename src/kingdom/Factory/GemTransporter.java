@@ -57,12 +57,13 @@ public class GemTransporter implements Runnable
     }
     for (int i = 0; i < valuables.size(); i++)
     {
-      treasureRoom.acquireWriteAccess(name);
-      treasureRoom.addValuable(valuables.get(i));
-      Catalog.getInstance().log("Deposited valuable: " + valuables.get(i), true);
-      treasureRoom.releaseWriteAccess(name);
+        treasureRoom.acquireWriteAccess(name);
+        treasureRoom.addValuable(valuables.get(i));
+        Catalog.getInstance()
+            .log("Deposited valuable: " + valuables.get(i), true);
+        itemQueue.remove(valuables.get(i));
+        treasureRoom.releaseWriteAccess(name);
     }
-    valuables = new ArrayList<>();
     target = new Random().nextInt(1400) + 100;
   }
 }
