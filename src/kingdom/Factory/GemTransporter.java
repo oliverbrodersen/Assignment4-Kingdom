@@ -3,6 +3,8 @@ package kingdom.Factory;
 import kingdom.ArrayList.ArrayList;
 import kingdom.Catalog;
 import kingdom.Flyweight.Valuable;
+import kingdom.TreasureRoomDoor;
+import kingdom.TresureRoomGuardsman;
 
 import java.util.Random;
 
@@ -11,10 +13,15 @@ public class GemTransporter implements Runnable
   protected GemDeposit queue;
   int target, current = 0;
   ArrayList<Valuable> itemQueue;
-  public GemTransporter(GemDeposit queue){
+  String name;
+  private TresureRoomGuardsman treasureRoom;
+
+  public GemTransporter(GemDeposit queue, TresureRoomGuardsman treasureRoom,String name){
     this.queue = queue;
     itemQueue = new ArrayList<>();
     target = new Random().nextInt(1400) + 100;
+    this.treasureRoom = treasureRoom;
+    this.name = name;
   }
 
   @Override public void run()
@@ -29,7 +36,7 @@ public class GemTransporter implements Runnable
           Catalog.getInstance().log("Deposited resource - Que size is now = " + queue.size(),
               true);
           //It should take the queue
-          take(valuable);
+          take(itemQueue);
         }
       }
     }
@@ -39,7 +46,7 @@ public class GemTransporter implements Runnable
     }
   }
 
-  private void take(Valuable valuable)
+  private void take(ArrayList<Valuable> valuables)
   {
     try{
       Thread.sleep(1000);
@@ -48,7 +55,14 @@ public class GemTransporter implements Runnable
     {
       Catalog.getInstance().log("Deposit interrupted", true);
     }
-    Catalog.getInstance().log("Deposited valuable: " + valuable, true);
+    for (int i = 0; i < valuables.size(); i++)
+    {
+      treasureRoom.acquireWriteAccess(name);
+      treasureRoom.addValuable(valuables.get(i));
+      Catalog.getInstance().log("Deposited valuable: " + valuables.get(i), true);
+      treasureRoom.releaseWriteAccess(name);
+    }
+    valuables = new ArrayList<>();
     target = new Random().nextInt(1400) + 100;
   }
 }
