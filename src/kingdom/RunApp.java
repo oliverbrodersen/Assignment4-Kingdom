@@ -19,6 +19,7 @@ public class RunApp
     Thread t6 = new Thread(new GemTransporter(gemDeposit, tresureRoomGuardsman, "Odin"));
 
     Thread t7 = new Thread(new Accountant(tresureRoomGuardsman, "Accountant"));
+    Thread t8 = new Thread(new King(tresureRoomGuardsman, "King"));
 
     t1.start();
     t2.start();
@@ -27,5 +28,6 @@ public class RunApp
     t5.start();
     t6.start();
     t7.start();
+    t8.start();
   }
 }

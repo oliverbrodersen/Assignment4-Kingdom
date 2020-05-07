@@ -63,7 +63,7 @@ public class TresureRoomGuardsman implements TreasureRoomDoor
   @Override public synchronized void releaseWriteAccess(String actorName)
   {
     activeWriter = false;
-    treasureRoom.acquireWriteAccess(actorName);
+    treasureRoom.releaseWriteAccess(actorName);
     notifyAll();
   }
 
